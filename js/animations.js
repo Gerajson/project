@@ -151,3 +151,17 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(document.getElementById('app'), { attributes: true, subtree: true, attributeFilter: ['class'] });
 
 });
+window.triggerConfetti = function triggerConfetti() {
+    const container = document.createElement('div');
+    container.className = 'confetti-container';
+    document.body.appendChild(container);
+    for (let i = 0; i < 18; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.top = '-24px';
+        piece.style.animationDelay = (Math.random() * 0.25) + 's';
+        container.appendChild(piece);
+    }
+    setTimeout(() => container.remove(), 1400);
+};

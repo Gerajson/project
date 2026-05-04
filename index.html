@@ -39,7 +39,9 @@
 
     <!-- Экран Школы (обучение) -->
     <div id="screen-school" class="screen">
-        <div class="intro-container">
+        <div class="school-container">
+            <div id="rules-container" class="rules-container"></div>
+            <div id="examples-container" class="intro-container" style="display:none;">
             <h2 class="intro-heading">Как запоминать слова?</h2>
             <p class="intro-instruction">Посмотри примеры — и попробуй сам!</p>
             <div id="intro-cards" class="intro-cards" role="region" aria-label="Примеры ассоциаций" aria-live="polite"></div>
@@ -50,6 +52,7 @@
             </div>
             <button id="btn-intro-finish" class="btn btn-primary btn-large hidden" aria-label="Завершить обучение">Понятно, хочу попробовать!</button>
             <button id="btn-back-to-menu-from-school" class="btn btn-secondary btn-back-menu">← В меню</button>
+            </div>
         </div>
     </div>
 

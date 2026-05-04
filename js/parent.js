@@ -1,4 +1,7 @@
 function initParent() {
+    const searchBtn = document.getElementById(SELECTORS.buttons.parentSearch);
+    if (!searchBtn || searchBtn.dataset.bound === "1") return;
+    searchBtn.dataset.bound = "1";
     const input = document.getElementById('input-child-id');
     const gallery = document.getElementById(SELECTORS.containers.parentGallery);
     const notFound = document.getElementById('parent-not-found');
@@ -10,7 +13,6 @@ function initParent() {
     }
     resetParent();
 
-    const searchBtn = document.getElementById(SELECTORS.buttons.parentSearch);
     searchBtn.addEventListener('click', () => {
         const id = input.value.trim().toLowerCase();
         if (!id) return;
