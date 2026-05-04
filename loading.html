@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка — uchi.ru × VK.ru | KidViz</title>
+    <!-- Шрифты: Factor A имитируем через Nunito + Baloo 2 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #F5F6F7;
+            --white: #FFFFFF;
+            --black100: #2F2F45;
+            --black60: rgba(47,47,69,0.6);
+            --black40: rgba(47,47,69,0.4);
+            --black20: rgba(47,47,69,0.2);
+            --primary: #765FDE;
+            --primary-hover: #634AD6;
+            --secondary: #EAE6FF;
+            --brand: #FF6170;
+            --success: #87D34C;
+            --blue: #3AAFFF;
+            --mint: #43D9AD;
+            --yellow: #FFD166;
+            --coral: #FF7A6B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            font-family: 'Nunito', 'Factor A', 'Baloo 2', sans-serif;
+            background: var(--bg-base);
+            cursor: default;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .loader {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-base);
+            overflow: hidden;
+        }
+
+        /* Заполняющаяся волшебная жидкость */
+        .fill-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 0;
+            background: linear-gradient(180deg,
+                #DDD7FF 0%,
+                #CEC6FF 15%,
+                #765FDE 55%,
+                #634AD6 80%,
+                #5137C7 100%);
+            z-index: 2;
+            animation: fillUp 3s cubic-bezier(0.42, 0, 0.28, 1) forwards;
+            overflow: visible;
+        }
+
+        /* Мерцание */
+        .fill-layer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 35%, rgba(255,255,255,0.06) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 70%, rgba(0,0,0,0.04) 0%, transparent 50%);
+            opacity: 0;
+            animation: shimmerAppear 0.8s ease-out 3s forwards;
+        }
+
+        @keyframes shimmerAppear {
+            to { opacity: 1; }
+        }
+
+        @keyframes fillUp {
+            0% { height: 0; }
+            15% { height: 10%; }
+            35% { height: 30%; }
+            55% { height: 55%; }
+            75% { height: 80%; }
+            90% { height: 95%; }
+            100% { height: 100%; }
+        }
+
+        /* Волны на поверхности */
+        .waves-layer {
+            position: absolute;
+            left: -5%;
+            right: -5%;
+            bottom: -2px;
+            height: 80px;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .waves-layer svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .wave-back {
+            bottom: -18px;
+            height: 70px;
+            z-index: 1;
+            opacity: 0.6;
+        }
+        .wave-back svg path {
+            fill: #5137C7;
+            animation: waveDriftBack 4.5s ease-in-out infinite;
+        }
+        .wave-mid {
+            bottom: -10px;
+            height: 65px;
+            z-index: 2;
+            opacity: 0.8;
+        }
+        .wave-mid svg path {
+            fill: #634AD6;
+            animation: waveDriftMid 3.8s ease-in-out infinite;
+        }
+        .wave-front {
+            bottom: -5px;
+            height: 55px;
+            z-index: 3;
+        }
+        .wave-front svg path {
+            fill: #DDD7FF;
+            animation: waveDriftFront 3s ease-in-out infinite;
+        }
+        .wave-foam {
+            bottom: -2px;
+            height: 40px;
+            z-index: 4;
+            opacity: 0.9;
+        }
+        .wave-foam svg path {
+            fill: #FFFFFF;
+            animation: waveDriftFoam 2.5s ease-in-out infinite;
+        }
+
+        @keyframes waveDriftBack {
+            0%,100% { transform: translateX(0); }
+            25% { transform: translateX(18px); }
+            50% { transform: translateX(-8px); }
+            75% { transform: translateX(12px); }
+        }
+        @keyframes waveDriftMid {
+            0%,100% { transform: translateX(0); }
+            30% { transform: translateX(-22px); }
+            55% { transform: translateX(14px); }
+            80% { transform: translateX(-10px); }
+        }
+        @keyframes waveDriftFront {
+            0%,100% { transform: translateX(0); }
+            35% { transform: translateX(25px); }
+            60% { transform: translateX(-16px); }
+            85% { transform: translateX(8px); }
+        }
+        @keyframes waveDriftFoam {
+            0%,100% { transform: translateX(0); }
+            40% { transform: translateX(-28px); }
+            65% { transform: translateX(18px); }
+            90% { transform: translateX(-6px); }
+        }
+
+        /* Пузырьки */
+        .bubbles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 5;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%,
+                rgba(255,255,255,0.9) 0%,
+                rgba(234,230,255,0.5) 40%,
+                rgba(118,95,222,0.2) 70%,
+                transparent 100%);
+            box-shadow: 0 0 8px rgba(255,255,255,0.6), 0 0 4px rgba(118,95,222,0.3);
+            animation: riseBubble linear infinite;
+            opacity: 0;
+        }
+        @keyframes riseBubble {
+            0% { transform: translateY(0) translateX(0) scale(0.6); opacity: 0; }
+            8% { opacity: 0.8; transform: translateY(-8%) translateX(var(--sway, 2px)) scale(1); }
+            25% { transform: translateY(-22%) translateX(calc(var(--sway) * -0.5)) scale(1.05); opacity: 0.7; }
+            50% { transform: translateY(-48%) translateX(var(--sway)) scale(0.9); opacity: 0.5; }
+            75% { transform: translateY(-72%) translateX(calc(var(--sway) * -0.3)) scale(1.02); opacity: 0.25; }
+            92% { transform: translateY(-92%) translateX(0) scale(0.7); opacity: 0.08; }
+            100% { transform: translateY(-105%) scale(0.3); opacity: 0; }
+        }
+
+        /* Искорки */
+        .sparkles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 6;
+            pointer-events: none;
+        }
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #FFFFFF;
+            border-radius: 50%;
+            box-shadow: 0 0 12px 4px rgba(255,255,255,0.9), 0 0 25px 6px rgba(118,95,222,0.5);
+            animation: twinkle 2.5s ease-in-out infinite;
+            opacity: 0;
+        }
+        @keyframes twinkle {
+            0%,100% { opacity: 0; transform: scale(0.3); }
+            15% { opacity: 1; transform: scale(1.4); }
+            30% { opacity: 0.6; transform: scale(0.8); }
+            50% { opacity: 0.9; transform: scale(1.2); }
+            70% { opacity: 0.3; transform: scale(0.6); }
+            85% { opacity: 0.7; transform: scale(1.0); }
+        }
+
+        /* Текст */
+        .text-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.7s ease-out;
+        }
+        .text-content.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .main-title {
+            font-family: 'Nunito', 'Factor A', 'Baloo 2', sans-serif;
+            font-weight: 900;
+            font-size: clamp(48px, 10vw, 80px);
+            color: #FFFFFF;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            text-shadow: 0 0 25px rgba(255,255,255,0.6), 0 0 50px rgba(118,95,222,0.4), 0 6px 16px rgba(0,0,0,0.2);
+            animation: titleLand 0.7s cubic-bezier(0.22,0.68,0.12,1.1) 0.15s both;
+        }
+        .collab-text {
+            font-weight: 400;
+            font-size: clamp(14px, 2.8vw, 22px);
+            color: rgba(255,255,255,0.9);
+            margin-top: 8px;
+            letter-spacing: 0.03em;
+            text-shadow: 0 0 12px rgba(255,255,255,0.4);
+            animation: fadeSlideUp 0.6s ease-out 0.45s both;
+        }
+        .collab-text strong {
+            font-weight: 700;
+            color: #FFD166;
+        }
+
+        @keyframes titleLand {
+            0% { transform: translateY(-60px) scale(0.7); opacity: 0; filter: blur(8px); }
+            55% { transform: translateY(8px) scale(1.04); opacity: 0.9; filter: blur(0); }
+            75% { transform: translateY(-4px) scale(0.97); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 1; filter: blur(0); }
+        }
+        @keyframes fadeSlideUp {
+            0% { transform: translateY(18px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Маскот Дино */
+        .mascot {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 120px;
+            z-index: 15;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .mascot.visible {
+            opacity: 1;
+        }
+        .mascot svg {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.2));
+        }
+
+
+
+
+
+
+
+
+        .mascot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
+}
+
+/* Лёгкое покачивание */
+@keyframes mascotFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Реакция при наведении */
+.mascot:hover {
+    transform: scale(1.1);
+    animation-play-state: paused;
+}
+    </style>
+</head>
+<body>
+    <div class="loader" id="loader">
+        <div class="fill-layer" id="fillLayer">
+            <div class="waves-layer wave-back">
+                <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 45 C100 25, 220 65, 360 45 C500 25, 620 65, 720 45 C820 25, 940 65, 1080 45 C1220 25, 1340 65, 1440 45 L1440 100 L0 100 Z"/>
+                </svg>
+            </div>
+            <div class="waves-layer wave-mid">
+                <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 50 C130 15, 260 75, 400 50 C540 25, 680 70, 800 50 C920 30, 1060 65, 1200 50 C1340 35, 1400 55, 1440 50 L1440 100 L0 100 Z"/>
+                </svg>
+            </div>
+            <div class="waves-layer wave-front">
+                <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 48 C160 18, 300 72, 440 48 C580 24, 700 68, 840 48 C980 28, 1100 62, 1240 48 C1380 34, 1420 44, 1440 48 L1440 100 L0 100 Z"/>
+                </svg>
+            </div>
+            <div class="waves-layer wave-foam">
+                <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 55 C150 35, 280 50, 420 55 C560 60, 680 40, 820 55 C960 70, 1080 42, 1220 55 C1360 68, 1410 50, 1440 55 L1440 100 L0 100 Z"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="bubbles-container" id="bubblesContainer"></div>
+        <div class="sparkles-container" id="sparklesContainer"></div>
+
+        <div class="text-content" id="textContent">
+            <h1 class="main-title">uchi.ru</h1>
+            <p class="collab-text">вместе с <strong>VK.ru</strong></p>
+        </div>
+
+        <!-- Дино -->
+        <div class="mascot" id="dinoMascot">
+            <img src="./assets/dino_main12.png" alt="Маскот" />
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const bubblesContainer = document.getElementById('bubblesContainer');
+            const sparklesContainer = document.getElementById('sparklesContainer');
+            const textContent = document.getElementById('textContent');
+            const dino = document.getElementById('dinoMascot');
+            const loader = document.getElementById('loader');
+
+            // Пузырьки
+            const bubbleCount = 28;
+            const frag = document.createDocumentFragment();
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                const size = Math.random() * 18 + 8;
+                const left = Math.random() * 90 + 5;
+                const bottom = Math.random() * 105 - 10;
+                const dur = Math.random() * 5 + 3;
+                const delay = Math.random() * 3;
+                const sway = (Math.random() - 0.5) * 25;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = left + '%';
+                bubble.style.bottom = bottom + '%';
+                bubble.style.animationDuration = dur + 's';
+                bubble.style.animationDelay = delay + 's';
+                bubble.style.setProperty('--sway', sway + 'px');
+                frag.appendChild(bubble);
+            }
+            bubblesContainer.appendChild(frag);
+
+            // Искорки
+            function createSparkles() {
+                const count = 35;
+                const f = document.createDocumentFragment();
+                for (let i = 0; i < count; i++) {
+                    const s = document.createElement('div');
+                    s.classList.add('sparkle');
+                    const size = Math.random() * 6 + 4;
+                    const left = Math.random() * 94 + 3;
+                    const top = Math.random() * 85 + 5;
+                    const delay = Math.random() * 3;
+                    const dur = Math.random() * 3 + 2;
+                    s.style.width = size + 'px';
+                    s.style.height = size + 'px';
+                    s.style.left = left + '%';
+                    s.style.top = top + '%';
+                    s.style.animationDelay = delay + 's';
+                    s.style.animationDuration = dur + 's';
+                    f.appendChild(s);
+                }
+                sparklesContainer.appendChild(f);
+            }
+
+            const LOAD_DURATION = 3000;
+            setTimeout(() => {
+                textContent.classList.add('visible');
+                createSparkles();
+                dino.classList.add('visible');
+                loader.classList.add('loaded');
+            }, LOAD_DURATION);
+
+            // Параллакс мышью
+            let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0, rafId;
+            document.addEventListener('mousemove', e => {
+                const cx = window.innerWidth/2, cy = window.innerHeight/2;
+                targetX = (e.clientX - cx) / cx * 8;
+                targetY = (e.clientY - cy) / cy * 6;
+            });
+            document.addEventListener('touchmove', e => {
+                const cx = window.innerWidth/2, cy = window.innerHeight/2;
+                const t = e.touches[0];
+                targetX = (t.clientX - cx) / cx * 8;
+                targetY = (t.clientY - cy) / cy * 6;
+            }, {passive: true});
+
+            function animateParallax() {
+                mouseX += (targetX - mouseX) * 0.05;
+                mouseY += (targetY - mouseY) * 0.05;
+                const fill = document.getElementById('fillLayer');
+                if (fill && loader.classList.contains('loaded')) {
+                    fill.style.transform = `translate(${mouseX * 0.3}px, ${mouseY * 0.2}px)`;
+                }
+                if (sparklesContainer && loader.classList.contains('loaded')) {
+                    sparklesContainer.style.transform = `translate(${mouseX * 0.6}px, ${mouseY * 0.5}px)`;
+                }
+                if (textContent.classList.contains('visible')) {
+                    textContent.style.transform = `translate(calc(-50% + ${mouseX * 0.8}px), calc(-50% + ${mouseY * 0.7}px))`;
+                }
+                rafId = requestAnimationFrame(animateParallax);
+            }
+            setTimeout(() => { rafId = requestAnimationFrame(animateParallax); }, LOAD_DURATION+200);
+
+            console.log('🦖🎨 Волшебная заставка готова — uchi.ru × VK.ru');
+
+            const REDIRECT_DELAY = 1300; // ждём 2 секунды после появления текста и маскота
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, LOAD_DURATION + REDIRECT_DELAY);
+        })();
+            // После полной анимации — переход на основное приложение
+            
+    </script>
+</body>
+</html>

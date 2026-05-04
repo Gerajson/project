@@ -1,0 +1,1343 @@
+/* ============================================================
+   Живой Бестиарий — Главная таблица стилей
+   Дизайн-кит: Учи.ру x VK, модульная сетка, полный адаптив
+   ============================================================ */
+
+/* ---------- Подключение шрифта (если Factor A недоступен, заменяется на системный) ---------- */
+@font-face {
+    font-family: 'Factor A';
+    src: local('Factor A'), url('../assets/fonts/FactorA-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Factor A';
+    src: local('Factor A Bold'), url('../assets/fonts/FactorA-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ---------- Глобальные переменные ---------- */
+:root {
+    /* Цвета */
+    --primary: #765FDE;
+    --primary-hover: #634AD6;
+    --primary-active: #5137C7;
+    --secondary: #EAE6FF;
+    --secondary-hover: rgba(221,215,255,0.9);
+    --secondary-active: #CEC6FF;
+    --brand: #FF6170; /* только в иллюстрациях */
+
+    --bg-base: #F5F6F7;
+    --white: #FFFFFF;
+    --text-main: #2F2F45;
+    --text-secondary: rgba(47,47,69,0.6);
+    --text-inactive: rgba(47,47,69,0.4);
+    --border-light: rgba(47,47,69,0.2);
+    --inactive-bg: rgba(47,47,69,0.1);
+
+    /* Системные */
+    --success: #87D34C;
+    --error: #EA3117;
+
+    /* Типографика */
+    --font-family: 'Factor A', 'Inter', system-ui, -apple-system, sans-serif;
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+
+    --h1-size: 80px; --h1-height: 96px;
+    --h2-size: 32px; --h2-height: 38px;
+    --h3-size: 24px; --h3-height: 30px;
+    --h4-size: 20px; --h4-height: 24px;
+    --body-large: 18px; --body-large-height: 24px;
+    --body-size: 16px; --body-height: 24px;
+    --body-small: 14px; --body-small-height: 20px;
+
+    /* Скругления */
+    --radius-main: 40px;
+    --radius-card: 24px;
+    --radius-btn: 16px;
+    --radius-small: 8px;
+    --radius-tiny: 2px;
+
+    /* Отступы (модуль 4px) */
+    --spacing-xs: 4px;
+    --spacing-s: 8px;
+    --spacing-m: 12px;
+    --spacing-l: 16px;
+    --spacing-xl: 20px;
+    --spacing-2xl: 24px;
+    --spacing-3xl: 28px;
+    --spacing-4xl: 32px;
+    --spacing-section: 40px;
+    --spacing-container-padding: 64px;
+    --spacing-outer: 80px;
+
+    /* Анимации */
+    --transition-fast: 0.2s ease;
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ---------- Сброс и базовые стили ---------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-main);
+    background-color: var(--bg-base);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Общий контейнер приложения ---------- */
+.app-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-outer);
+    overflow: hidden;
+}
+
+/* ---------- Экраны (общие стили переключения) ---------- */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-smooth), visibility var(--transition-smooth);
+    pointer-events: none;
+    padding: var(--spacing-outer);
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 1;
+}
+
+/* Анимация плавного появления/исчезновения */
+.screen.transitioning {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* ---------- Кнопки ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-s);
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: inherit;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--body-large);
+    line-height: var(--body-large-height);
+    cursor: pointer;
+    transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+    padding: var(--spacing-l) var(--spacing-4xl);
+    white-space: nowrap;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* Primary */
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(118, 95, 222, 0.3);
+}
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(118, 95, 222, 0.4);
+}
+.btn-primary:active {
+    background-color: var(--primary-active);
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(118, 95, 222, 0.3);
+}
+
+/* Secondary */
+.btn-secondary {
+    background-color: var(--secondary);
+    color: var(--text-main);
+}
+.btn-secondary:hover {
+    background-color: var(--secondary-hover);
+}
+.btn-secondary:active {
+    background-color: var(--secondary-active);
+}
+
+/* Text-only button (ссылка) */
+.btn-text {
+    background: transparent;
+    color: var(--primary);
+    padding: var(--spacing-s) var(--spacing-m);
+    font-weight: var(--font-weight-normal);
+    font-size: var(--body-size);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.btn-text:hover {
+    color: var(--primary-hover);
+    background: rgba(118, 95, 222, 0.05);
+}
+
+/* Большая кнопка */
+.btn-large {
+    padding: var(--spacing-l) var(--spacing-4xl);
+    font-size: var(--body-large);
+    min-height: 56px;
+}
+
+/* Кнопка с иконкой */
+.btn-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+/* Неактивная кнопка */
+.btn:disabled,
+.btn.disabled {
+    background-color: var(--inactive-bg);
+    color: var(--text-inactive);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* ---------- Ввод текста (родитель) ---------- */
+.input {
+    height: 56px;
+    padding: 0 var(--spacing-2xl);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-btn);
+    font-family: inherit;
+    font-size: var(--body-large);
+    color: var(--text-main);
+    background: var(--white);
+    outline: none;
+    transition: border-color var(--transition-fast);
+}
+.input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(118, 95, 222, 0.2);
+}
+.input::placeholder {
+    color: var(--text-inactive);
+}
+
+/* ---------- Скрытый класс ---------- */
+.hidden {
+    display: none !important;
+}
+
+/* ---------- ЭКРАН 1: ВХОД ---------- */
+.entry-card {
+    background: var(--white);
+    border-radius: var(--radius-main);
+    padding: var(--spacing-container-padding);
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2xl);
+    box-shadow: 0 20px 40px rgba(47,47,69,0.08), 0 0 0 1px rgba(47,47,69,0.05);
+    text-align: center;
+    animation: fadeInUp 0.5s ease both;
+}
+
+.entry-mascot {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin-bottom: var(--spacing-m);
+}
+.entry-mascot-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.mascot-speech-bubble {
+    position: absolute;
+    top: -30px;
+    right: -150px;
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: var(--spacing-l) var(--spacing-xl);
+    box-shadow: 0 8px 24px rgba(47,47,69,0.12);
+    font-size: var(--body-small);
+    line-height: var(--body-small-height);
+    max-width: 220px;
+    color: var(--text-secondary);
+    opacity: 0;
+    animation: floatIn 0.6s ease forwards 0.2s;
+}
+.mascot-speech-bubble::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: 40px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 12px solid var(--white);
+}
+
+.entry-title {
+    font-size: var(--h2-size);
+    line-height: var(--h2-height);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-main);
+}
+.entry-subtitle {
+    font-size: var(--body-large);
+    line-height: var(--body-large-height);
+    color: var(--text-secondary);
+    margin-top: -12px;
+}
+.entry-buttons {
+    display: flex;
+    gap: var(--spacing-2xl);
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+@media (max-width: 480px) {
+    .entry-buttons {
+        flex-direction: column;
+    }
+}
+
+/* Частицы фона */
+.bg-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(118,95,222,0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,97,112,0.05) 0%, transparent 50%);
+}
+
+/* ---------- ЭКРАН 2: ВВОДНЫЙ КУРС (карусель) ---------- */
+.intro-container {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2xl);
+}
+.intro-heading {
+    font-size: var(--h2-size);
+    font-weight: var(--font-weight-bold);
+}
+.intro-instruction {
+    color: var(--text-secondary);
+    font-size: var(--body-large);
+}
+.intro-cards {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    max-width: 600px;
+    height: 360px;
+    position: relative;
+    border-radius: var(--radius-card);
+    background: var(--white);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+.intro-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: var(--spacing-2xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.35s ease, opacity 0.25s ease;
+    will-change: transform, opacity;
+}
+.intro-card img {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+    margin-bottom: var(--spacing-l);
+}
+.intro-card .word {
+    font-size: var(--h3-size);
+    font-weight: var(--font-weight-bold);
+}
+.intro-card .transcription {
+    font-size: var(--body-small);
+    color: var(--text-secondary);
+}
+.intro-card .translation {
+    font-size: var(--body-large);
+    margin-bottom: var(--spacing-s);
+}
+.intro-card .description {
+    font-size: var(--body-size);
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 80%;
+}
+.intro-navigation {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2xl);
+}
+.intro-counter {
+    font-size: var(--body-size);
+    color: var(--text-secondary);
+}
+
+/* ---------- ЭКРАН 3: ГЛАВНЫЙ ЭКРАН РЕБЁНКА ---------- */
+.main-layout {
+    display: flex;
+    width: 100%;
+    max-width: 1100px;
+    gap: var(--spacing-section);
+    align-items: center;
+    flex-wrap: wrap;
+}
+.main-mascot {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+.main-mascot-img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+}
+.main-mascot .mascot-speech-bubble {
+    position: relative;
+    top: 0;
+    right: 0;
+    max-width: 260px;
+    margin-top: var(--spacing-l);
+    opacity: 1;
+    animation: none;
+}
+.main-card {
+    flex: 1;
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: var(--spacing-container-padding);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl);
+    min-width: 320px;
+}
+.main-card-title {
+    font-size: var(--h3-size);
+}
+.main-action-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-l);
+}
+.upload-loader {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--text-secondary);
+    font-size: var(--body-size);
+}
+.upload-loader .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: bounce 0.6s infinite alternate;
+}
+.upload-loader .dot:nth-child(2) { animation-delay: 0.2s; }
+.upload-loader .dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ---------- ЭКРАН 4: БЕСТИАРИЙ ---------- */
+.bestiary-container {
+    width: 100%;
+    max-width: 1000px;
+}
+.bestiary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-2xl);
+}
+.bestiary-title {
+    font-size: var(--h2-size);
+}
+.bestiary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--spacing-2xl);
+}
+.bestiary-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+.bestiary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}
+.bestiary-card:active {
+    transform: scale(0.98);
+}
+.bestiary-card .card-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border-light);
+}
+.bestiary-card .card-info {
+    padding: var(--spacing-l);
+}
+.bestiary-card .card-word {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--body-large);
+}
+.bestiary-card .card-date {
+    font-size: var(--body-small);
+    color: var(--text-secondary);
+}
+
+/* Анимация появления новой карточки */
+.beast-enter {
+    animation: beastPopIn var(--transition-bounce);
+}
+
+/* Пустой бестиарий */
+.bestiary-empty {
+    text-align: center;
+    padding: var(--spacing-4xl);
+    color: var(--text-secondary);
+}
+
+/* ---------- ЭКРАН 5: РОДИТЕЛЬ ---------- */
+.parent-container {
+    width: 100%;
+    max-width: 700px;
+    background: var(--white);
+    border-radius: var(--radius-main);
+    padding: var(--spacing-container-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+.parent-title {
+    font-size: var(--h3-size);
+}
+.parent-instruction {
+    color: var(--text-secondary);
+}
+.parent-search {
+    display: flex;
+    gap: var(--spacing-l);
+}
+.parent-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--spacing-l);
+}
+.parent-not-found {
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+/* ---------- МОДАЛЬНОЕ ОКНО ---------- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(47,47,69,0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: var(--spacing-4xl);
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.25s ease;
+}
+.modal-overlay.visible .modal-card {
+    transform: scale(1);
+}
+.modal-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: var(--radius-small);
+    margin-bottom: var(--spacing-l);
+}
+.modal-word {
+    font-size: var(--h3-size);
+    margin-bottom: var(--spacing-s);
+}
+.modal-date {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* ---------- АНИМАЦИИ (keyframes) ---------- */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bounce {
+    to { transform: translateY(-6px); }
+}
+@keyframes beastPopIn {
+    0% { opacity: 0; transform: scaleY(0) scaleX(0.8); }
+    60% { transform: scaleY(1.05) scaleX(0.95); }
+    100% { opacity: 1; transform: scaleY(1) scaleX(1); }
+}
+
+/* ---------- АДАПТИВ (брейкпоинты) ---------- */
+@media (max-width: 1024px) {
+    :root {
+        --spacing-outer: 40px;
+        --spacing-container-padding: 40px;
+    }
+    .main-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+    .main-mascot {
+        flex-basis: auto;
+    }
+}
+@media (max-width: 768px) {
+    :root {
+        --spacing-outer: 24px;
+        --spacing-container-padding: 24px;
+        --h2-size: 28px; --h2-height: 34px;
+        --body-large: 16px; --body-large-height: 22px;
+    }
+    .entry-card {
+        padding: var(--spacing-2xl);
+    }
+    .mascot-speech-bubble {
+        right: -80px;
+        max-width: 180px;
+    }
+    .main-layout {
+        gap: var(--spacing-2xl);
+    }
+}
+@media (max-width: 480px) {
+    .entry-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    .parent-search {
+        flex-direction: column;
+    }
+}
+
+
+/* ---------- МЕНЮ ---------- */
+.menu-container {
+    max-width: 900px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2xl);
+}
+.menu-title {
+    font-size: var(--h1-size);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--h1-height);
+}
+.menu-subtitle {
+    font-size: var(--body-large);
+    color: var(--text-secondary);
+}
+.menu-cards {
+    display: flex;
+    gap: var(--spacing-2xl);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.menu-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: var(--spacing-4xl) var(--spacing-2xl);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    border: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-l);
+    width: 250px;
+    text-align: center;
+    font-family: inherit;
+    color: var(--text-main);
+}
+.menu-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+}
+.menu-card-icon {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+.menu-card-title {
+    font-size: var(--h3-size);
+    font-weight: var(--font-weight-bold);
+}
+.menu-card-desc {
+    font-size: var(--body-size);
+    color: var(--text-secondary);
+}
+
+/* ---------- МАСТЕРСКАЯ ---------- */
+.workshop-container {
+    max-width: 700px;
+    width: 100%;
+    background: var(--white);
+    border-radius: var(--radius-main);
+    padding: var(--spacing-container-padding);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+.workshop-title {
+    font-size: var(--h2-size);
+    margin-bottom: var(--spacing-s);
+}
+.workshop-instruction {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-2xl);
+}
+.workshop-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-l);
+}
+.label {
+    font-weight: var(--font-weight-bold);
+    margin-bottom: -8px;
+}
+.textarea {
+    resize: vertical;
+    min-height: 80px;
+    padding: var(--spacing-l);
+}
+.workshop-upload-area {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-s);
+}
+.workshop-hint {
+    font-size: var(--body-small);
+    color: var(--text-secondary);
+}
+.btn-inline {
+    display: inline;
+    padding: 0;
+    font-size: inherit;
+}
+
+/* кнопка "назад в меню" маленькая */
+.btn-back-menu {
+    margin-top: var(--spacing-2xl);
+    align-self: flex-start;
+}
+
+/* Описание в карточке коллекции */
+.card-desc {
+    font-size: var(--body-small);
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Разрешаем скролл экранам, если контент не помещается */
+.screen {
+    overflow-y: auto;
+}
+
+/* Для внутренних контейнеров с гридами, чтобы скроллились при переполнении */
+.bestiary-container,
+.parent-container,
+.workshop-container {
+    max-height: 90vh;   /* ограничиваем высоту и включаем скролл */
+    overflow-y: auto;
+}
+
+/* Карусель остаётся без скролла (управляется свайпами/кнопками) */
+.intro-cards {
+    overflow: hidden;
+}
+/* ========== ПАРЯЩИЕ ИКОНКИ МЕНЮ ========== */
+.menu-card-icon {
+    animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Задержка для каждой карточки, чтобы парили вразнобой */
+.menu-card:nth-child(1) .menu-card-icon { animation-delay: 0s; }
+.menu-card:nth-child(2) .menu-card-icon { animation-delay: 0.3s; }
+.menu-card:nth-child(3) .menu-card-icon { animation-delay: 0.6s; }
+
+/* Пульсация главной кнопки «Сохранить» */
+#btn-save-beast:not(:disabled) {
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(118, 95, 222, 0.5); }
+    70% { box-shadow: 0 0 0 15px rgba(118, 95, 222, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(118, 95, 222, 0); }
+}
+
+/* ========== МАСКОТ-ПОМОЩНИК В УГЛУ ========== */
+.mascot-helper {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    z-index: 50;
+    cursor: pointer;
+    animation: bounceIn 0.5s ease;
+    transition: transform 0.3s;
+}
+.mascot-helper:hover {
+    transform: scale(1.1);
+}
+.mascot-helper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.mascot-helper .tooltip {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    background: white;
+    border-radius: 16px;
+    padding: 8px 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    font-size: 14px;
+    color: var(--text-main);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+.mascot-helper:hover .tooltip {
+    opacity: 1;
+}
+@keyframes bounceIn {
+    0% { transform: scale(0); }
+    60% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+/* ========== КОНФЕТТИ (ЗВЁЗДОЧКИ) ========== */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 200;
+}
+.confetti-piece {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-image: url('../assets/icon_star.svg');  /* или иконка звезды */
+    background-size: contain;
+    animation: confettiFall 1s ease-out forwards;
+}
+@keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ========== ЭФФЕКТ ПЕРЕЛИСТЫВАНИЯ КАРТОЧЕК (ШКОЛА) ========== */
+.intro-card {
+    transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.3s;
+}
+
+/* ========== МОДАЛЬНОЕ ОКНО С ВОЛШЕБНЫМ ПОЯВЛЕНИЕМ ========== */
+.modal-overlay.visible {
+    backdrop-filter: blur(8px);
+}
+.modal-card {
+    animation: modalPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+@keyframes modalPop {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* ========== ПЛАВНАЯ СМЕНА ЭКРАНОВ (уже было, но можно усилить) ========== */
+.screen.active {
+    animation: screenFadeIn 0.35s ease both;
+}
+@keyframes screenFadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+
+/* ========== СТИЛИ ДЛЯ ШКОЛЫ (ПРАВИЛА) ========== */
+.school-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.rules-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* акварельные пятна */
+.bg-decor {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    pointer-events: none; z-index:0;
+}
+.bg-blob {
+    position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.25;
+}
+.blob1 { width: 350px; height: 350px; background: #EBF7FF; top: -80px; right: -80px; }
+.blob2 { width: 300px; height: 300px; background: #E7F6DB; bottom: -100px; left: -100px; }
+.blob3 { width: 200px; height: 200px; background: #F3E8FF; top: 40%; left: 60%; }
+
+/* частицы */
+.particles-layer {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    pointer-events: none; z-index:1;
+}
+.particle {
+    position: absolute; opacity: 0.7; font-size: 20px;
+    animation: floatUp linear infinite;
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.8));
+}
+@keyframes floatUp {
+    0% { transform: translateY(105vh) rotate(0deg); opacity: 0.6; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+/* карточка-свиток */
+.scroll-card {
+    position: relative;
+    width: 100%; max-width: 650px;
+    background: var(--white);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--black20);
+    box-shadow: var(--shadow-md);
+    padding: 40px 32px;
+    z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 24px;
+    transition: opacity 0.5s, transform 0.5s;
+    opacity: 1; transform: translateY(0);
+    overflow: hidden;
+    margin: auto;
+}
+.rule-title {
+    font-size: 32px; font-weight: 800;
+    color: var(--black100);
+    letter-spacing: 0.02em;
+    white-space: normal; word-break: break-word;
+    text-align: center;
+    border-right: 3px solid var(--primary);
+    animation: blinkCursor 0.8s infinite;
+    min-height: 38px;
+}
+@keyframes blinkCursor {
+    0%,100% { border-color: var(--primary); }
+    50% { border-color: transparent; }
+}
+.rule-desc {
+    font-size: 18px; color: var(--black60);
+    text-align: center; max-width: 90%;
+    line-height: 1.5;
+}
+
+/* интерактивная сцена */
+.interactive-scene {
+    width: 100%;
+    background: #FAFAFC;
+    border: 2px dashed var(--black20);
+    border-radius: var(--radius-card);
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; padding: 20px;
+    gap: 16px;
+    position: relative;
+    transition: background 0.3s, border-color 0.3s;
+}
+.interactive-scene.complete {
+    background: #E7F6DB;
+    border-color: var(--success);
+}
+.scene-object {
+    width: 100px; height: 100px;
+    background: var(--white);
+    border: 2px solid var(--black20);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    box-shadow: var(--shadow-sm);
+    user-select: none;
+    position: relative;
+}
+.scene-object:hover {
+    transform: scale(1.05);
+    border-color: var(--primary);
+    box-shadow: 0 8px 20px rgba(118,95,222,0.2);
+}
+.scene-object.enlarged {
+    transform: scale(1.5);
+    border-color: var(--primary);
+    box-shadow: 0 12px 30px rgba(118,95,222,0.3);
+}
+.scene-object.move-anim {
+    animation: objectMove 0.6s ease-in-out;
+}
+@keyframes objectMove {
+    0% { transform: translateX(0); }
+    30% { transform: translateX(30px); }
+    60% { transform: translateX(-20px); }
+    100% { transform: translateX(0); }
+}
+.scene-object.replaced {
+    animation: swap 0.5s;
+}
+@keyframes swap {
+    0% { transform: scale(1); opacity: 1; }
+    40% { transform: scale(0.8); opacity: 0; }
+    60% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.scene-hint {
+    position: absolute; bottom: -8px;
+    font-size: 14px; font-weight: 700;
+    background: var(--primary); color: white;
+    padding: 4px 14px; border-radius: 20px;
+    opacity: 0; transition: opacity 0.3s;
+    pointer-events: none;
+}
+.interactive-scene:hover .scene-hint {
+    opacity: 1;
+}
+
+/* кнопка "Понятно" */
+.btn-understand {
+    background: var(--inactive-bg);
+    color: var(--text-inactive);
+    border: none;
+    padding: 14px 36px;
+    font-size: 20px; font-weight: 700;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex; align-items: center; gap: 10px;
+}
+.btn-understand.active {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 8px 20px rgba(118,95,222,0.3);
+    animation: pulseActive 1.5s infinite;
+}
+@keyframes pulseActive {
+    0%,100% { box-shadow: 0 0 0 0 rgba(118,95,222,0.4); }
+    50% { box-shadow: 0 0 0 12px rgba(118,95,222,0); }
+}
+
+/* тест */
+.quiz-container {
+    display: flex; flex-direction: column; align-items: center; gap: 24px;
+    width: 100%;
+}
+.quiz-question {
+    font-size: 22px; font-weight: 700;
+    color: var(--black100); text-align: center;
+}
+.options {
+    display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+}
+.option-card {
+    width: 200px;
+    background: var(--white);
+    border: 2px solid var(--black20);
+    border-radius: var(--radius-card);
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.option-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+    box-shadow: 0 8px 20px rgba(118,95,222,0.25);
+}
+.option-card.correct {
+    border-color: var(--success);
+    background: #E7F6DB;
+}
+.option-card.wrong {
+    border-color: var(--error);
+    background: #FFEEEE;
+}
+.option-emoji { font-size: 40px; }
+.quiz-progress {
+    display: flex; gap: 12px;
+}
+.dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--black20); border: 2px solid var(--white);
+}
+.dot.filled { background: var(--primary); }
+
+/* фейерверк */
+.fireworks-canvas {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    pointer-events: none; z-index: 50;
+}
+
+/* маскот (как в исходных файлах) */
+.mascot {
+    position: absolute; bottom: 20px; right: 24px;
+    width: 90px; height: 90px; z-index: 20;
+    cursor: pointer; transition: transform 0.3s;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.1));
+}
+.mascot:hover { transform: scale(1.1); }
+.mascot-bubble {
+    position: absolute; bottom: 110%; right: 0;
+    background: white; padding: 8px 16px;
+    border-radius: 20px 20px 4px 20px;
+    font-size: 14px; font-weight: 700;
+    color: var(--black100);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--black20);
+    white-space: nowrap;
+    opacity: 0; transition: opacity 0.3s;
+    pointer-events: none;
+}
+.mascot:hover .mascot-bubble { opacity: 1; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ========== АТМОСФЕРА ГЛАВНОГО МЕНЮ (menu-magic) ========== */
+#screen-menu {
+    background: var(--bg-base);
+}
+.main-menu {
+    position: relative;
+    width: 100%; height: 100%;
+    max-width: 1200px; margin: 0 auto;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+}
+#menu-bg-layer {
+    position: absolute;
+    top:0; left:0; width:100%; height:100%;
+    background: radial-gradient(circle at 30% 30%, #EBF7FF 0%, transparent 60%),
+                radial-gradient(circle at 70% 70%, #E7F6DB 0%, transparent 60%);
+    z-index: 0;
+}
+.menu-clouds {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    z-index: 1; pointer-events:none;
+}
+.menu-cloud {
+    position: absolute; background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(12px); border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.9);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+#menu-cloud1 { width:240px; height:90px; top:8%; left:5%; animation: drift 22s infinite alternate; }
+#menu-cloud2 { width:200px; height:80px; top:15%; right:10%; animation: drift 18s -4s infinite alternate; }
+#menu-cloud3 { width:280px; height:100px; bottom:20%; left:15%; animation: drift 26s -8s infinite alternate; }
+#menu-cloud4 { width:180px; height:70px; bottom:15%; right:20%; animation: drift 20s -12s infinite alternate; }
+@keyframes drift {
+    0% { transform: translate(0,0) scale(1); }
+    100% { transform: translate(15px, -10px) scale(1.03); }
+}
+#menuStarCanvas {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    z-index: 2; pointer-events:none;
+}
+#menu-particles-layer {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    pointer-events:none; z-index:3;
+}
+.menu-particle {
+    position: absolute; opacity:0.8; font-size:22px;
+    animation: fall linear infinite;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.9));
+}
+@keyframes fall {
+    0% { transform: translateY(-5vh) rotate(0deg); opacity:0.9; }
+    90% { opacity:0.6; }
+    100% { transform: translateY(105vh) rotate(360deg); opacity:0; }
+}
+#menu-mascot-container {
+    position: absolute; left: 8%; bottom: 10%;
+    width:150px; height:150px; z-index:15;
+    cursor:pointer; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.15));
+    transition: transform 0.3s;
+}
+#menu-mascot-container:hover { transform: scale(1.05); }
+#menu-mascot-img {
+    width:100%; height:100%; object-fit:contain;
+}
+#menu-mascot-cloud {
+    position: absolute; bottom:-10px; left:-20px;
+    width:190px; height:90px; background:rgba(255,255,255,0.9);
+    border-radius:50%; border:2px solid white; z-index:-1;
+}
+#menu-speech-bubble {
+    position: absolute; bottom:110%; left:50%; transform:translateX(-50%);
+    background:white; padding:10px 20px;
+    border-radius:24px 24px 24px 6px;
+    font-size:16px; font-weight:800; color:var(--text-main);
+    border:1px solid var(--border-light);
+    box-shadow:0 6px 12px rgba(0,0,0,0.1);
+    white-space:nowrap; opacity:0; transition:0.3s; pointer-events:none;
+}
+#menu-speech-bubble.show { opacity:1; }
+@media (max-width:768px) {
+    #menu-mascot-container { width:120px; height:120px; left:2%; bottom:6%; }
+}

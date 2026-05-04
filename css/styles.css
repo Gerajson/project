@@ -1,0 +1,695 @@
+/* ============================================================
+   Живой Бестиарий — Главная таблица стилей
+   Дизайн-кит: Учи.ру x VK, модульная сетка, полный адаптив
+   ============================================================ */
+
+/* ---------- Подключение шрифта (если Factor A недоступен, заменяется на системный) ---------- */
+@font-face {
+    font-family: 'Factor A';
+    src: local('Factor A'), url('../assets/fonts/FactorA-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Factor A';
+    src: local('Factor A Bold'), url('../assets/fonts/FactorA-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ---------- Глобальные переменные ---------- */
+:root {
+    /* Цвета */
+    --primary: #765FDE;
+    --primary-hover: #634AD6;
+    --primary-active: #5137C7;
+    --secondary: #EAE6FF;
+    --secondary-hover: rgba(221,215,255,0.9);
+    --secondary-active: #CEC6FF;
+    --brand: #FF6170; /* только в иллюстрациях */
+
+    --bg-base: #F5F6F7;
+    --white: #FFFFFF;
+    --text-main: #2F2F45;
+    --text-secondary: rgba(47,47,69,0.6);
+    --text-inactive: rgba(47,47,69,0.4);
+    --border-light: rgba(47,47,69,0.2);
+    --inactive-bg: rgba(47,47,69,0.1);
+
+    /* Системные */
+    --success: #87D34C;
+    --error: #EA3117;
+
+    /* Типографика */
+    --font-family: 'Factor A', 'Inter', system-ui, -apple-system, sans-serif;
+    --font-weight-normal: 400;
+    --font-weight-bold: 700;
+
+    --h1-size: 80px; --h1-height: 96px;
+    --h2-size: 32px; --h2-height: 38px;
+    --h3-size: 24px; --h3-height: 30px;
+    --h4-size: 20px; --h4-height: 24px;
+    --body-large: 18px; --body-large-height: 24px;
+    --body-size: 16px; --body-height: 24px;
+    --body-small: 14px; --body-small-height: 20px;
+
+    /* Скругления */
+    --radius-main: 40px;
+    --radius-card: 24px;
+    --radius-btn: 16px;
+    --radius-small: 8px;
+    --radius-tiny: 2px;
+
+    /* Отступы (модуль 4px) */
+    --spacing-xs: 4px;
+    --spacing-s: 8px;
+    --spacing-m: 12px;
+    --spacing-l: 16px;
+    --spacing-xl: 20px;
+    --spacing-2xl: 24px;
+    --spacing-3xl: 28px;
+    --spacing-4xl: 32px;
+    --spacing-section: 40px;
+    --spacing-container-padding: 64px;
+    --spacing-outer: 80px;
+
+    /* Анимации */
+    --transition-fast: 0.2s ease;
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ---------- Сброс и базовые стили ---------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-main);
+    background-color: var(--bg-base);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Общий контейнер приложения ---------- */
+.app-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-outer);
+    overflow: hidden;
+}
+
+/* ---------- Экраны (общие стили переключения) ---------- */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-smooth), visibility var(--transition-smooth);
+    pointer-events: none;
+    padding: var(--spacing-outer);
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 1;
+}
+
+/* Анимация плавного появления/исчезновения */
+.screen.transitioning {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* ---------- Кнопки ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-s);
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: inherit;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--body-large);
+    line-height: var(--body-large-height);
+    cursor: pointer;
+    transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+    padding: var(--spacing-l) var(--spacing-4xl);
+    white-space: nowrap;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* Primary */
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(118, 95, 222, 0.3);
+}
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(118, 95, 222, 0.4);
+}
+.btn-primary:active {
+    background-color: var(--primary-active);
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(118, 95, 222, 0.3);
+}
+
+/* Secondary */
+.btn-secondary {
+    background-color: var(--secondary);
+    color: var(--text-main);
+}
+.btn-secondary:hover {
+    background-color: var(--secondary-hover);
+}
+.btn-secondary:active {
+    background-color: var(--secondary-active);
+}
+
+/* Text-only button (ссылка) */
+.btn-text {
+    background: transparent;
+    color: var(--primary);
+    padding: var(--spacing-s) var(--spacing-m);
+    font-weight: var(--font-weight-normal);
+    font-size: var(--body-size);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.btn-text:hover {
+    color: var(--primary-hover);
+    background: rgba(118, 95, 222, 0.05);
+}
+
+/* Большая кнопка */
+.btn-large {
+    padding: var(--spacing-l) var(--spacing-4xl);
+    font-size: var(--body-large);
+    min-height: 56px;
+}
+
+/* Кнопка с иконкой */
+.btn-icon img {
+    width: 24px;
+    height: 24px;
+}
+
+/* Неактивная кнопка */
+.btn:disabled,
+.btn.disabled {
+    background-color: var(--inactive-bg);
+    color: var(--text-inactive);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* ---------- Ввод текста (родитель) ---------- */
+.input {
+    height: 56px;
+    padding: 0 var(--spacing-2xl);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-btn);
+    font-family: inherit;
+    font-size: var(--body-large);
+    color: var(--text-main);
+    background: var(--white);
+    outline: none;
+    transition: border-color var(--transition-fast);
+}
+.input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(118, 95, 222, 0.2);
+}
+.input::placeholder {
+    color: var(--text-inactive);
+}
+
+/* ---------- Скрытый класс ---------- */
+.hidden {
+    display: none !important;
+}
+
+/* ---------- ЭКРАН 1: ВХОД ---------- */
+.entry-card {
+    background: var(--white);
+    border-radius: var(--radius-main);
+    padding: var(--spacing-container-padding);
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2xl);
+    box-shadow: 0 20px 40px rgba(47,47,69,0.08), 0 0 0 1px rgba(47,47,69,0.05);
+    text-align: center;
+    animation: fadeInUp 0.5s ease both;
+}
+
+.entry-mascot {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin-bottom: var(--spacing-m);
+}
+.entry-mascot-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.mascot-speech-bubble {
+    position: absolute;
+    top: -30px;
+    right: -150px;
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: var(--spacing-l) var(--spacing-xl);
+    box-shadow: 0 8px 24px rgba(47,47,69,0.12);
+    font-size: var(--body-small);
+    line-height: var(--body-small-height);
+    max-width: 220px;
+    color: var(--text-secondary);
+    opacity: 0;
+    animation: floatIn 0.6s ease forwards 0.2s;
+}
+.mascot-speech-bubble::before {
+    content: '';
+    position: absolute;
+    left: -12px;
+    top: 40px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 12px solid var(--white);
+}
+
+.entry-title {
+    font-size: var(--h2-size);
+    line-height: var(--h2-height);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-main);
+}
+.entry-subtitle {
+    font-size: var(--body-large);
+    line-height: var(--body-large-height);
+    color: var(--text-secondary);
+    margin-top: -12px;
+}
+.entry-buttons {
+    display: flex;
+    gap: var(--spacing-2xl);
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+@media (max-width: 480px) {
+    .entry-buttons {
+        flex-direction: column;
+    }
+}
+
+/* Частицы фона */
+.bg-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(118,95,222,0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,97,112,0.05) 0%, transparent 50%);
+}
+
+/* ---------- ЭКРАН 2: ВВОДНЫЙ КУРС (карусель) ---------- */
+.intro-container {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2xl);
+}
+.intro-heading {
+    font-size: var(--h2-size);
+    font-weight: var(--font-weight-bold);
+}
+.intro-instruction {
+    color: var(--text-secondary);
+    font-size: var(--body-large);
+}
+.intro-cards {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    max-width: 600px;
+    height: 360px;
+    position: relative;
+    border-radius: var(--radius-card);
+    background: var(--white);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+.intro-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: var(--spacing-2xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.35s ease, opacity 0.25s ease;
+    will-change: transform, opacity;
+}
+.intro-card img {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+    margin-bottom: var(--spacing-l);
+}
+.intro-card .word {
+    font-size: var(--h3-size);
+    font-weight: var(--font-weight-bold);
+}
+.intro-card .transcription {
+    font-size: var(--body-small);
+    color: var(--text-secondary);
+}
+.intro-card .translation {
+    font-size: var(--body-large);
+    margin-bottom: var(--spacing-s);
+}
+.intro-card .description {
+    font-size: var(--body-size);
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 80%;
+}
+.intro-navigation {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2xl);
+}
+.intro-counter {
+    font-size: var(--body-size);
+    color: var(--text-secondary);
+}
+
+/* ---------- ЭКРАН 3: ГЛАВНЫЙ ЭКРАН РЕБЁНКА ---------- */
+.main-layout {
+    display: flex;
+    width: 100%;
+    max-width: 1100px;
+    gap: var(--spacing-section);
+    align-items: center;
+    flex-wrap: wrap;
+}
+.main-mascot {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+.main-mascot-img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+}
+.main-mascot .mascot-speech-bubble {
+    position: relative;
+    top: 0;
+    right: 0;
+    max-width: 260px;
+    margin-top: var(--spacing-l);
+    opacity: 1;
+    animation: none;
+}
+.main-card {
+    flex: 1;
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: var(--spacing-container-padding);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl);
+    min-width: 320px;
+}
+.main-card-title {
+    font-size: var(--h3-size);
+}
+.main-action-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-l);
+}
+.upload-loader {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--text-secondary);
+    font-size: var(--body-size);
+}
+.upload-loader .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: bounce 0.6s infinite alternate;
+}
+.upload-loader .dot:nth-child(2) { animation-delay: 0.2s; }
+.upload-loader .dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ---------- ЭКРАН 4: БЕСТИАРИЙ ---------- */
+.bestiary-container {
+    width: 100%;
+    max-width: 1000px;
+}
+.bestiary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-2xl);
+}
+.bestiary-title {
+    font-size: var(--h2-size);
+}
+.bestiary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--spacing-2xl);
+}
+.bestiary-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+.bestiary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}
+.bestiary-card:active {
+    transform: scale(0.98);
+}
+.bestiary-card .card-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border-light);
+}
+.bestiary-card .card-info {
+    padding: var(--spacing-l);
+}
+.bestiary-card .card-word {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--body-large);
+}
+.bestiary-card .card-date {
+    font-size: var(--body-small);
+    color: var(--text-secondary);
+}
+
+/* Анимация появления новой карточки */
+.beast-enter {
+    animation: beastPopIn var(--transition-bounce);
+}
+
+/* Пустой бестиарий */
+.bestiary-empty {
+    text-align: center;
+    padding: var(--spacing-4xl);
+    color: var(--text-secondary);
+}
+
+/* ---------- ЭКРАН 5: РОДИТЕЛЬ ---------- */
+.parent-container {
+    width: 100%;
+    max-width: 700px;
+    background: var(--white);
+    border-radius: var(--radius-main);
+    padding: var(--spacing-container-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+.parent-title {
+    font-size: var(--h3-size);
+}
+.parent-instruction {
+    color: var(--text-secondary);
+}
+.parent-search {
+    display: flex;
+    gap: var(--spacing-l);
+}
+.parent-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--spacing-l);
+}
+.parent-not-found {
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+/* ---------- МОДАЛЬНОЕ ОКНО ---------- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(47,47,69,0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+.modal-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: var(--spacing-4xl);
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.25s ease;
+}
+.modal-overlay.visible .modal-card {
+    transform: scale(1);
+}
+.modal-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: var(--radius-small);
+    margin-bottom: var(--spacing-l);
+}
+.modal-word {
+    font-size: var(--h3-size);
+    margin-bottom: var(--spacing-s);
+}
+.modal-date {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* ---------- АНИМАЦИИ (keyframes) ---------- */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bounce {
+    to { transform: translateY(-6px); }
+}
+@keyframes beastPopIn {
+    0% { opacity: 0; transform: scaleY(0) scaleX(0.8); }
+    60% { transform: scaleY(1.05) scaleX(0.95); }
+    100% { opacity: 1; transform: scaleY(1) scaleX(1); }
+}
+
+/* ---------- АДАПТИВ (брейкпоинты) ---------- */
+@media (max-width: 1024px) {
+    :root {
+        --spacing-outer: 40px;
+        --spacing-container-padding: 40px;
+    }
+    .main-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+    .main-mascot {
+        flex-basis: auto;
+    }
+}
+@media (max-width: 768px) {
+    :root {
+        --spacing-outer: 24px;
+        --spacing-container-padding: 24px;
+        --h2-size: 28px; --h2-height: 34px;
+        --body-large: 16px; --body-large-height: 22px;
+    }
+    .entry-card {
+        padding: var(--spacing-2xl);
+    }
+    .mascot-speech-bubble {
+        right: -80px;
+        max-width: 180px;
+    }
+    .main-layout {
+        gap: var(--spacing-2xl);
+    }
+}
+@media (max-width: 480px) {
+    .entry-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    .parent-search {
+        flex-direction: column;
+    }
+}

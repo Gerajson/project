@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Живой Бестиарий — запоминай и твори</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Factor+A:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="app" class="app-container">
+
+    <!-- Экран Главного меню -->
+    <div id="screen-menu" class="screen active">
+        <div class="menu-container">
+            <h1 class="menu-title">Живой Бестиарий</h1>
+            <p class="menu-subtitle">Выбери путь, чтобы запомнить слова через ассоциации</p>
+            <div class="menu-cards">
+                <button id="btn-go-school" class="menu-card">
+                    <img src="./assets/school.jpg" data-asset="iconSchool" alt="Школа" class="menu-card-icon">
+                    <span class="menu-card-title">Школа</span>
+                    <p class="menu-card-desc">Пойми, как создавать волшебные ассоциации</p>
+                </button>
+                <button id="btn-go-workshop" class="menu-card">
+                    <img src="./assets/master.jpg" data-asset="iconWorkshop" alt="Мастерская" class="menu-card-icon">
+                    <span class="menu-card-title">Мастерская</span>
+                    <p class="menu-card-desc">Придумай свою ассоциацию и оживи её</p>
+                </button>
+                <button id="btn-go-collection" class="menu-card">
+                    <img src="./assets/collection.jpg" data-asset="iconCollection" alt="Коллекция" class="menu-card-icon">
+                    <span class="menu-card-title">Коллекция</span>
+                    <p class="menu-card-desc">Посмотри на своих существ</p>
+                </button>
+            </div>
+            <button id="btn-go-parent" class="btn btn-text">Я родитель</button>
+        </div>
+        <div class="bg-particles" aria-hidden="true"></div>
+    </div>
+
+    <!-- Экран Школы (обучение) -->
+    <div id="screen-school" class="screen">
+        <div class="intro-container">
+            <h2 class="intro-heading">Как запоминать слова?</h2>
+            <p class="intro-instruction">Посмотри примеры — и попробуй сам!</p>
+            <div id="intro-cards" class="intro-cards" role="region" aria-label="Примеры ассоциаций" aria-live="polite"></div>
+            <div class="intro-navigation">
+                <button id="btn-intro-prev" class="btn btn-secondary" aria-label="Предыдущий пример" disabled>← Назад</button>
+                <span id="intro-counter" class="intro-counter">1 / 5</span>
+                <button id="btn-intro-next" class="btn btn-primary" aria-label="Следующий пример">Дальше →</button>
+            </div>
+            <button id="btn-intro-finish" class="btn btn-primary btn-large hidden" aria-label="Завершить обучение">Понятно, хочу попробовать!</button>
+            <button id="btn-back-to-menu-from-school" class="btn btn-secondary btn-back-menu">← В меню</button>
+        </div>
+    </div>
+
+    <!-- Экран Мастерской -->
+    <div id="screen-workshop" class="screen">
+        <div class="workshop-container">
+            <h2 class="workshop-title">Мастерская</h2>
+            <p class="workshop-instruction">Заполни поля, нарисуй ассоциацию на бумаге, сфотографируй и загрузи.</p>
+            <div class="workshop-form">
+                <label class="label" for="input-word">Английское слово</label>
+                <input type="text" id="input-word" class="input" placeholder="например, butterfly" required>
+                <label class="label" for="input-translation">Перевод</label>
+                <input type="text" id="input-translation" class="input" placeholder="бабочка" required>
+                <label class="label" for="input-description">Что ты нарисовал(а)? (описание ассоциации)</label>
+                <textarea id="input-description" class="input textarea" placeholder="Бабочка с крыльями из масла, сидит на бутерброде" rows="3"></textarea>
+                <div class="workshop-upload-area">
+                    <input type="file" id="input-upload" accept="image/*" class="hidden" aria-label="Выбрать рисунок">
+                    <button id="btn-upload" class="btn btn-primary btn-large btn-icon">
+                        <img src="" data-asset="iconUpload" alt="" class="btn-icon-img"> Загрузить рисунок
+                    </button>
+                    <div id="upload-loader" class="upload-loader hidden" aria-live="assertive">
+                        <span class="dot"></span><span class="dot"></span><span class="dot"></span> сохраняем...
+                    </div>
+                    <p class="workshop-hint">Можно сперва посмотреть примеры в <button id="btn-go-school-from-workshop" class="btn btn-text btn-inline">Школе</button></p>
+                </div>
+                <button id="btn-save-beast" class="btn btn-primary btn-large" disabled>Сохранить существо</button>
+            </div>
+            <button id="btn-back-to-menu-from-workshop" class="btn btn-secondary btn-back-menu">← В меню</button>
+        </div>
+    </div>
+
+    <!-- Экран Коллекции -->
+    <div id="screen-collection" class="screen">
+        <div class="bestiary-container">
+            <div class="bestiary-header">
+                <h2 class="bestiary-title">Коллекция</h2>
+                <button id="btn-back-to-menu-from-collection" class="btn btn-secondary">← В меню</button>
+            </div>
+            <div id="bestiary-grid" class="bestiary-grid" role="list" aria-label="Список созданных существ"></div>
+            <div id="bestiary-empty" class="bestiary-empty hidden">
+                <img src="" data-asset="placeholderBeast" alt="Пустая коллекция" class="placeholder-img">
+                <p>Здесь пока пусто. Создай своё первое существо в Мастерской!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Экран Родителя -->
+    <div id="screen-parent" class="screen">
+        <div class="parent-container">
+            <h2 class="parent-title">Личный кабинет родителя</h2>
+            <p class="parent-instruction">Введите ID ребёнка, чтобы увидеть его существ.</p>
+            <div class="parent-search">
+                <input type="text" id="input-child-id" class="input" placeholder="Например, 7a3f2d" maxlength="6" aria-label="Введите ID ребёнка">
+                <button id="btn-parent-search" class="btn btn-primary" aria-label="Посмотреть существ">Посмотреть</button>
+            </div>
+            <div id="parent-gallery" class="parent-gallery" role="list" aria-label="Галерея рисунков ребёнка"></div>
+            <div id="parent-not-found" class="parent-not-found hidden">
+                <img src="" data-asset="mascotSmall" alt="Динозаврик задумался" class="not-found-img">
+                <p>Ребёнок с таким ID пока не создал ни одного существа.</p>
+            </div>
+            <button id="btn-back-to-menu-from-parent" class="btn btn-secondary btn-back-menu">← В меню</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="modal-overlay" class="modal-overlay hidden" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-word">
+            <img id="modal-image" class="modal-image" src="" alt="Рисунок ассоциации">
+            <h3 id="modal-word" class="modal-word"></h3>
+            <p id="modal-date" class="modal-date"></p>
+            <button id="modal-close" class="btn btn-primary" aria-label="Закрыть">Закрыть</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/animations.js"></script>
+<script src="js/menu-magic.js"></script>
+<script src="js/app.js"></script>
+<script src="js/child.js"></script>
+<script src="js/parent.js"></script>
+<script src="js/school-rules.js"></script>
+</body>
+</html>
