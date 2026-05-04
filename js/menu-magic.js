@@ -6,6 +6,7 @@
 (function() {
     let starAnimationId = null;
     let particleInterval = null;
+    let resizeHandler = null;
 
     // Главная функция инициализации
     window.initMenuMagic = function() {
@@ -53,10 +54,12 @@
             canvas.height = menuScreen.clientHeight;
         };
         resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+        if (resizeHandler) window.removeEventListener('resize', resizeHandler);
+        resizeHandler = resizeCanvas;
+        window.addEventListener('resize', resizeHandler);
 
         const stars = [];
-        const COUNT = 100;
+        const COUNT = window.innerWidth <= 768 ? 40 : 100;
         class Star {
             constructor() { this.reset(); }
             reset() {
@@ -122,9 +125,11 @@
             particlesLayer.appendChild(p);
             p.addEventListener('animationend', () => p.remove());
         }
-        particleInterval = setInterval(addParticle, 900);
+        const particleDelay = window.innerWidth <= 768 ? 1400 : 900;
+        particleInterval = setInterval(addParticle, particleDelay);
         // Стартовая пачка частиц
-        for (let i = 0; i < 12; i++) setTimeout(addParticle, i * 200);
+        const initialParticles = window.innerWidth <= 768 ? 6 : 12;
+        for (let i = 0; i < initialParticles; i++) setTimeout(addParticle, i * 200);
 
         // 5. МАСКОТ (с подсказками)
         if (!document.getElementById('menu-mascot-container')) {
@@ -173,6 +178,10 @@
         if (particleInterval) {
             clearInterval(particleInterval);
             particleInterval = null;
+        }
+        if (resizeHandler) {
+            window.removeEventListener('resize', resizeHandler);
+            resizeHandler = null;
         }
     };
 })();

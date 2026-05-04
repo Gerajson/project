@@ -86,6 +86,8 @@ function updateIntroView(prevBtn, nextBtn, counter, finishBtn) {
 
 // ------------------- Мастерская -------------------
 function initWorkshop() {
+    if (initWorkshop._bound) return;
+    initWorkshop._bound = true;
     if (!currentChildID) currentChildID = getOrCreateChildID();
     const wordInput = document.getElementById('input-word');
     const transInput = document.getElementById('input-translation');
@@ -121,6 +123,7 @@ function initWorkshop() {
 
     wordInput.addEventListener('input', checkForm);
     transInput.addEventListener('input', checkForm);
+    descInput.addEventListener('input', checkForm);
 
     saveBtn.addEventListener('click', () => {
         if (!uploadedImageData) return;
@@ -131,7 +134,9 @@ function initWorkshop() {
         lastAddedBeastId = beast.id;
         // Очищаем форму
         wordInput.value = ''; transInput.value = ''; descInput.value = '';
-        uploadedImageData = null; uploadBtn.textContent = 'Загрузить рисунок'; saveBtn.disabled = true;
+        uploadedImageData = null; uploadBtn.textContent = 'Загрузить рисунок';
+        fileInput.value = '';
+        saveBtn.disabled = true;
         // Переходим в коллекцию с анимацией
         const workshopScreen = document.getElementById(SELECTORS.screens.workshop);
         const collectionScreen = document.getElementById(SELECTORS.screens.collection);
